@@ -1,5 +1,6 @@
 package cardgame.controller;
 
+import cardgame.evaluators.GameEvaluator;
 import cardgame.model.*;
 import cardgame.view.GameSwing;
 import cardgame.view.GameViewable;
@@ -19,15 +20,17 @@ public class GameController {
     GameViewable view;
     ArrayList<Player> playerList;
     GameViewable gameViewables;
-    private Player winner;
+    GameEvaluator gameEvaluator;
+    Player winner;
 
-    public GameController(Deck deck) {
-        this.deck = deck;
+    public GameController(GameEvaluator gameEvaluator) {
+        this.deck = new Deck();
         this.view = new GameSwing();
         view.setController(this);
         gameState = GameState.AddingPlayer;
         playerList = new ArrayList<>();
         this.view.createAndShowGUI();
+        this.gameEvaluator = gameEvaluator;
     }
 
     public void addPlayer(String playerName) {
@@ -55,30 +58,9 @@ public class GameController {
             card.setFaceUp(true);
             view.showCardForPlayer(playerList.indexOf(player), player.getName(), card.getRank().toString(), card.getSuit().toString());
         }
-        winner = evaluateWinner();
+        winner = gameEvaluator.evaluateWinner(playerList);
         view.showWinner(new StringBuilder(winner.getName()));
         gameState = GameState.WinnerRevealed;
-    }
-
-
-
-    Player evaluateWinner() {
-        Card bestCard = new Card(Rank.TWO, Suit.DIAMONDS);
-        Player bestPlayer = new Player("Initial player");
-        Card currentCard;
-        for (Player player : playerList) {
-            currentCard = player.getHand().getCards().getFirst();
-            if (currentCard.getRank().value > bestCard.getRank().value) {
-                bestCard = new Card(currentCard.getRank(), currentCard.getSuit());
-                bestPlayer = player;
-            } else if (currentCard.getRank().value == bestCard.getRank().value) {
-                if (currentCard.getSuit().value > bestCard.getSuit().value) {
-                    bestCard = new Card(currentCard.getRank(), currentCard.getSuit());
-                    bestPlayer = player;
-                }
-            }
-        }
-        return bestPlayer;
     }
 
     public void rebuildDeck() {

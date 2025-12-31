@@ -6,7 +6,7 @@ public interface GameViewable {
     void setController(GameController gc);
 
     // same implementation as our CommandLineView
-// just show what the controller is telling us
+    // just show what the controller is telling us
     void showPlayerName(int playerIndex, String playerName);
 
     void showCardForPlayer(int playerIndex, String playerName, String cardRank, String cardSuit);
