@@ -29,4 +29,8 @@ public enum Rank {
         }
         throw new IllegalArgumentException("No rank attributed to this value: " + value);
     }
+
+    public int getRank() {
+        return value;
+    }
 }

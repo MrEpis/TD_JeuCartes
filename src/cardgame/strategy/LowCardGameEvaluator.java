@@ -1,4 +1,4 @@
-package cardgame.evaluators;
+package cardgame.strategy;
 
 import cardgame.model.Card;
 import cardgame.model.Player;
